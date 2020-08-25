@@ -1,0 +1,19 @@
+name: "k8s toolbox"
+description: "A suite of common tools for k8s usage"
+inputs:
+  kubectl:
+    description: "Version of kubectl to use"
+    required: false
+    default: "v1.18.0"
+  kube-config:
+    description: "Base 64 encoded ~/.kube/config for kubectl"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        sudo curl --fail -sL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${{ inputs.kubectl }}/bin/linux/amd64/kubectl
+        sudo chmod +x /usr/local/bin/kubectl
+        mkdir -p $HOME/.kube
+        echo "${{ inputs.kube-config }}" | base64 -d > $HOME/.kube/config
+      shell: bash
