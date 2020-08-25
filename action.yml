@@ -8,12 +8,31 @@ inputs:
   kube-config:
     description: "Base 64 encoded ~/.kube/config for kubectl"
     required: true
+  render:
+    description: "Version of render to use"
+    required: false
+    default: "v0.2.0"
+  aws-iam-authenticator:
+    description: "Version of aws iam authenticator to use"
+    required: false
+    default: "1.12.10/2019-08-14"
 runs:
   using: "composite"
   steps:
-    - run: |
+    - name: kubetcl
+      run: |
         sudo curl --fail -sL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${{ inputs.kubectl }}/bin/linux/amd64/kubectl
         sudo chmod +x /usr/local/bin/kubectl
         mkdir -p $HOME/.kube
         echo "${{ inputs.kube-config }}" | base64 -d > $HOME/.kube/config
+      shell: bash
+    - name: render
+      run: |
+        sudo curl --fail -sL -o /usr/local/bin/render https://github.com/VirtusLab/render/releases/download/v0.2.0/render-linux-amd64
+        sudo chmod +x /usr/local/bin/render
+      shell: bash
+    - name: aws iam authenticator
+      run: |
+        sudo curl --fail -sL -o /usr/local/bin/aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/${{ inputs.aws-iam-authenticator }}/bin/linux/amd64/aws-iam-authenticator
+        sudo chmod +x /usr/local/bin/aws-iam-authenticator
       shell: bash
