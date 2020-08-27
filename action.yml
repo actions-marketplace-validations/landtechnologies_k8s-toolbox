@@ -20,6 +20,10 @@ inputs:
     description: "Version of aws iam authenticator to use"
     required: false
     default: "1.12.10/2019-08-14"
+  argo:
+    description: "Version of argo to use"
+    required: false
+    default: "v2.4.3"
 runs:
   using: "composite"
   steps:
@@ -46,4 +50,9 @@ runs:
       run: |
         sudo curl --fail -sL -o /usr/local/bin/aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/${{ inputs.aws-iam-authenticator }}/bin/linux/amd64/aws-iam-authenticator
         sudo chmod +x /usr/local/bin/aws-iam-authenticator
+      shell: bash
+    - name: argo
+      run: |
+        sudo curl --fail -sL -o /usr/local/bin/argo https://github.com/argoproj/argo/releases/download/${{ inputs.argo }}/argo-linux-amd64
+        sudo chmod +x /usr/local/bin/argo
       shell: bash
