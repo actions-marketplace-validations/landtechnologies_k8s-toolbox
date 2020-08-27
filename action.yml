@@ -40,6 +40,7 @@ runs:
         sudo mv $HOME/helm /usr/local/bin/helm
         sudo chmod +x /usr/local/bin/helm
         helm init --client-only
+        helm repo update
       shell: bash
     - name: render
       run: |
