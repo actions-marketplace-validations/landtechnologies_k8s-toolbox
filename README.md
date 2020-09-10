@@ -1,6 +1,6 @@
 # k8s toolbox
 
-A selected group of tools for interacting with Kubernetes. "Composite steps" that install the tools onto the running build container.
+A selected group of tools for interacting with Kubernetes. The action is made up of "composite steps" that install the tools onto the running build container.
 
 ## What's included?
 
