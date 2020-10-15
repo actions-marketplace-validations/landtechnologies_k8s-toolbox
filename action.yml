@@ -8,6 +8,10 @@ inputs:
   kube-config:
     description: "Base 64 encoded ~/.kube/config for kubectl"
     required: true
+  kops:
+    description: "Version of kops to use"
+    required: false
+    default: "v1.18.0"
   helm:
     description: "Version of helm to use"
     required: false
@@ -33,6 +37,11 @@ runs:
         sudo chmod +x /usr/local/bin/kubectl
         mkdir -p $HOME/.kube
         echo "${{ inputs.kube-config }}" | base64 -d > $HOME/.kube/config
+      shell: bash
+    - name: kops
+      run: |
+        sudo curl --fail -sL -o /usr/local/bin/kops https://github.com/kubernetes/kops/releases/download/${{ inputs.kops }}/kops-darwin-amd64
+        sudo chmod +x /usr/local/bin/kops
       shell: bash
     - name: helm
       run: |
