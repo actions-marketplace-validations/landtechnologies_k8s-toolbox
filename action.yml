@@ -40,7 +40,7 @@ runs:
       shell: bash
     - name: kops
       run: |
-        sudo curl --fail -sL -o /usr/local/bin/kops https://github.com/kubernetes/kops/releases/download/${{ inputs.kops }}/kops-darwin-amd64
+        sudo curl --fail -sL -o /usr/local/bin/kops https://github.com/kubernetes/kops/releases/download/${{ inputs.kops }}/kops-linux-amd64
         sudo chmod +x /usr/local/bin/kops
       shell: bash
     - name: helm
