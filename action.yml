@@ -15,7 +15,7 @@ inputs:
   helm:
     description: "Version of helm to use"
     required: false
-    default: "v2.16.1"
+    default: "v3.3.4"
   render:
     description: "Version of render to use"
     required: false
