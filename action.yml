@@ -48,6 +48,7 @@ runs:
         wget -q https://get.helm.sh/helm-${{ inputs.helm }}-linux-amd64.tar.gz -O - | tar -xzO linux-amd64/helm > $HOME/helm 
         sudo mv $HOME/helm /usr/local/bin/helm
         sudo chmod +x /usr/local/bin/helm
+        helm repo add stable https://kubernetes-charts.storage.googleapis.com/
         helm repo update
       shell: bash
     - name: render
