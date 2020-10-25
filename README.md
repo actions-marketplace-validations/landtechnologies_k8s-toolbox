@@ -16,7 +16,7 @@ A selected group of tools for interacting with Kubernetes on an AWS environment.
 tldr;
 
 ```yaml
-uses: robertbeal/k8s-toolbox@v13
+uses: landtechnologies/k8s-toolbox@v13
 with:
   kubectl: "v1.18.10"
   kops: "v1.18.1"
@@ -31,7 +31,7 @@ with:
    - `kube-config` is a base64 encoded copy of your `~/.kube/config` file, ie `base64 ~/.kube/config` stored in GitHub Secrets
 
    ```yaml
-   uses: robertbeal/k8s-toolbox@v13
+   uses: landtechnologies/k8s-toolbox@v13
    with:
      kubectl: "v1.18.0"
      kube-config: ${{secrets.KUBE_CONFIG}}
@@ -42,7 +42,7 @@ with:
    - defaults to the latest stable release on GitHub
 
    ```yaml
-   uses: robertbeal/k8s-toolbox@v13
+   uses: landtechnologies/k8s-toolbox@v13
    with:
      kops: "v1.18.0"
    ```
@@ -52,7 +52,7 @@ with:
    - defaults to the latest stable release on GitHub
 
    ```yaml
-   uses: robertbeal/k8s-toolbox@v13
+   uses: landtechnologies/k8s-toolbox@v13
    with:
      helm: "v3.3.4"
    ```
@@ -62,7 +62,7 @@ with:
    - defaults to the latest stable release on GitHub
 
    ```yaml
-   uses: robertbeal/k8s-toolbox@v13
+   uses: landtechnologies/k8s-toolbox@v13
    with:
      argo: "v2.11.6"
    ```
