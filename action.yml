@@ -28,7 +28,8 @@ runs:
   using: "composite"
   steps:
     - name: dependencies
-      run: sudo apt-get install -y jq        
+      run: sudo apt-get install -y jq 
+      shell: bash   
     - name: kubetcl
       run: |
         if [ -n "${{ inputs.kubectl }}" ]; then
