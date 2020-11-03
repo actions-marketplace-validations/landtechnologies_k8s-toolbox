@@ -1,6 +1,9 @@
 name: "k8s toolbox"
 description: "A suite of common tools for k8s usage"
 inputs:
+  versions:
+    description: "A publicly curl-able json file for all toolbox application versions"
+    required: false
   kubectl:
     description: "Version of kubectl to use"
     required: false
@@ -29,10 +32,23 @@ runs:
   steps:
     - name: dependencies
       run: sudo apt-get install -y jq 
-      shell: bash   
+      shell: bash  
+    - versions:
+      run: |
+        if [ -n "${{ inputs.versions }}" ]; then
+          curl --fail -sL ${{ inputs.versions }} > ~/versions.json
+        else
+          jq -n \
+            --arg kubectl "$(curl --fail -sL https://api.github.com/repos/kubernetes/kubernetes/releases/latest | jq -r -e '.tag_name')" \
+            --arg kops "$(curl --fail -sL https://api.github.com/repos/kubernetes/kops/releases/latest | jq -r -e '.tag_name')" \
+            --arg helm "$(curl --fail -sL https://api.github.com/repos/helm/helm/releases/latest | jq -r -e '.tag_name')" \
+            --arg argo "$(curl --fail -sL https://api.github.com/repos/argoproj/argo/releases/latest | jq -r -e '.tag_name')" \
+            '{kubectl: $kubectl, kops: $kops, helm: $helm, argo: $argo}' > ~/versions.json
+        fi
+      shell: bash
     - name: kubetcl
       run: |
-        version="$(curl --fail -sL https://api.github.com/repos/kubernetes/kubernetes/releases/latest | jq -r -e '.tag_name')"
+        version="$(jq -r .kubectl ~/versions.json)"
       
         if [ -n "${{ inputs.kubectl }}" ]; then
           version="${{ inputs.kubectl }}"
@@ -46,7 +62,7 @@ runs:
       shell: bash
     - name: kops
       run: |
-        version="$(curl --fail -sL https://api.github.com/repos/kubernetes/kops/releases/latest | jq -r -e '.tag_name')"
+        version="$(jq -r .kops ~/versions.json)"
         
         if [ -n "${{ inputs.kops }}" ]; then
           version="${{ inputs.kops }}"
@@ -58,7 +74,7 @@ runs:
       shell: bash
     - name: helm
       run: |
-        version="$(curl --fail -sL https://api.github.com/repos/helm/helm/releases/latest | jq -r -e '.tag_name')"
+        version="$(jq -r .helm ~/versions.json)"
       
         if [ -n "${{ inputs.helm }}" ]; then
           version="${{ inputs.helm }}"
@@ -81,7 +97,7 @@ runs:
       shell: bash
     - name: argo
       run: |
-        version="$(curl --fail -sL https://api.github.com/repos/argoproj/argo/releases/latest | jq -r -e '.tag_name')"
+        version="$(jq -r .argo ~/versions.json)"
       
         if [ -n "${{ inputs.argo }}" ]; then
           version="${{ inputs.argo }}"
