@@ -32,58 +32,56 @@ runs:
       shell: bash   
     - name: kubetcl
       run: |
+        version="$(curl --silent https://api.github.com/repos/kubernetes/kubernetes/releases/latest | jq -r '.tag_name')"
+      
         if [ -n "${{ inputs.kubectl }}" ]; then
           version="${{ inputs.kubectl }}"
-        else
-          version="$(curl --silent https://api.github.com/repos/kubernetes/kubernetes/releases/latest | jq -r '.tag_name')"
         fi
         
-        sudo curl --fail -sL -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$version/bin/linux/amd64/kubectl
+        sudo curl --fail -sL -o /usr/local/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/$version/bin/linux/amd64/kubectl"
         sudo chmod +x /usr/local/bin/kubectl
         mkdir -p $HOME/.kube
         echo "${{ inputs.kube-config }}" | base64 -d > $HOME/.kube/config
       shell: bash
     - name: kops
       run: |
+        version="$(curl --silent https://api.github.com/repos/kubernetes/kops/releases/latest | jq -r '.tag_name')"
+        
         if [ -n "${{ inputs.kops }}" ]; then
           version="${{ inputs.kops }}"
-        else
-          version="$(curl --silent https://api.github.com/repos/kubernetes/kops/releases/latest | jq -r '.tag_name')"
         fi
       
-        sudo curl --fail -sL -o /usr/local/bin/kops https://github.com/kubernetes/kops/releases/download/$version/kops-linux-amd64
+        sudo curl --fail -sL -o /usr/local/bin/kops "https://github.com/kubernetes/kops/releases/download/$version/kops-linux-amd64"
         sudo chmod +x /usr/local/bin/kops
       shell: bash
     - name: helm
       run: |
         if [ -n "${{ inputs.helm }}" ]; then
           version="${{ inputs.helm }}"
-        else
-          version="$(curl --silent https://api.github.com/repos/helm/helm/releases/latest | jq -r '.tag_name')"
         fi    
       
-        wget -q https://get.helm.sh/helm-$version-linux-amd64.tar.gz -O - | tar -xzO linux-amd64/helm > $HOME/helm 
+        wget -q "https://get.helm.sh/helm-$version-linux-amd64.tar.gz" -O - | tar -xzO linux-amd64/helm > $HOME/helm 
         sudo mv $HOME/helm /usr/local/bin/helm
         sudo chmod +x /usr/local/bin/helm
       shell: bash
     - name: render
       run: |
-        sudo curl --fail -sL -o /usr/local/bin/render https://github.com/VirtusLab/render/releases/download/${{ inputs.render }}/render-linux-amd64
+        sudo curl --fail -sL -o /usr/local/bin/render "https://github.com/VirtusLab/render/releases/download/${{ inputs.render }}/render-linux-amd64"
         sudo chmod +x /usr/local/bin/render
       shell: bash
     - name: aws iam authenticator
       run: |
-        sudo curl --fail -sL -o /usr/local/bin/aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/${{ inputs.aws-iam-authenticator }}/bin/linux/amd64/aws-iam-authenticator
+        sudo curl --fail -sL -o /usr/local/bin/aws-iam-authenticator "https://amazon-eks.s3-us-west-2.amazonaws.com/${{ inputs.aws-iam-authenticator }}/bin/linux/amd64/aws-iam-authenticator"
         sudo chmod +x /usr/local/bin/aws-iam-authenticator
       shell: bash
     - name: argo
       run: |
+        version="$(curl --silent https://api.github.com/repos/argoproj/argo/releases/latest | jq -r '.tag_name')"
+      
         if [ -n "${{ inputs.argo }}" ]; then
           version="${{ inputs.argo }}"
-        else
-          version="$(curl --silent https://api.github.com/repos/argoproj/argo/releases/latest | jq -r '.tag_name')"
         fi    
       
-        sudo curl --fail -sL -o /usr/local/bin/argo https://github.com/argoproj/argo/releases/download/$verion/argo-linux-amd64
+        sudo curl --fail -sL -o /usr/local/bin/argo "https://github.com/argoproj/argo/releases/download/$verion/argo-linux-amd64"
         sudo chmod +x /usr/local/bin/argo
       shell: bash
