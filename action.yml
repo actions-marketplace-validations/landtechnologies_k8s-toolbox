@@ -32,12 +32,13 @@ runs:
       shell: bash   
     - name: kubetcl
       run: |
-        version="$(curl --silent https://api.github.com/repos/kubernetes/kubernetes/releases/latest | jq -r '.tag_name')"
+        version="$(curl --fail -sL https://api.github.com/repos/kubernetes/kubernetes/releases/latest | jq -r -e '.tag_name')"
       
         if [ -n "${{ inputs.kubectl }}" ]; then
           version="${{ inputs.kubectl }}"
         fi
         
+        echo "Installing kubectl $version..."
         sudo curl --fail -sL -o /usr/local/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/$version/bin/linux/amd64/kubectl"
         sudo chmod +x /usr/local/bin/kubectl
         mkdir -p $HOME/.kube
@@ -45,21 +46,25 @@ runs:
       shell: bash
     - name: kops
       run: |
-        version="$(curl --silent https://api.github.com/repos/kubernetes/kops/releases/latest | jq -r '.tag_name')"
+        version="$(curl --fail -sL https://api.github.com/repos/kubernetes/kops/releases/latest | jq -r -e '.tag_name')"
         
         if [ -n "${{ inputs.kops }}" ]; then
           version="${{ inputs.kops }}"
         fi
-      
+        
+        echo "Installing kops $version..."
         sudo curl --fail -sL -o /usr/local/bin/kops "https://github.com/kubernetes/kops/releases/download/$version/kops-linux-amd64"
         sudo chmod +x /usr/local/bin/kops
       shell: bash
     - name: helm
       run: |
+        version="$(curl --fail -sL https://api.github.com/repos/helm/helm/releases/latest | jq -r -e '.tag_name')"
+      
         if [ -n "${{ inputs.helm }}" ]; then
           version="${{ inputs.helm }}"
         fi    
       
+        echo "Installing helm $version..."
         wget -q "https://get.helm.sh/helm-$version-linux-amd64.tar.gz" -O - | tar -xzO linux-amd64/helm > $HOME/helm 
         sudo mv $HOME/helm /usr/local/bin/helm
         sudo chmod +x /usr/local/bin/helm
@@ -76,12 +81,13 @@ runs:
       shell: bash
     - name: argo
       run: |
-        version="$(curl --silent https://api.github.com/repos/argoproj/argo/releases/latest | jq -r '.tag_name')"
+        version="$(curl --fail -sL https://api.github.com/repos/argoproj/argo/releases/latest | jq -r -e '.tag_name')"
       
         if [ -n "${{ inputs.argo }}" ]; then
           version="${{ inputs.argo }}"
         fi    
       
+        echo "Installing argo $version..."
         sudo curl --fail -sL -o /usr/local/bin/argo "https://github.com/argoproj/argo/releases/download/$verion/argo-linux-amd64"
         sudo chmod +x /usr/local/bin/argo
       shell: bash
