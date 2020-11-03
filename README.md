@@ -13,7 +13,7 @@ A selected group of tools for interacting with Kubernetes on an AWS environment.
 
 ## How do I use it?
 
-a) Explicitly specify any versions (or else they default to the latest release from each, found on GitHub)
+a) Explicitly specify any versions (or else they default to the latest release from each, found on GitHub). Specifying a version will override everything else (version.json file and defaults).
 
 ```yaml
 uses: landtechnologies/k8s-toolbox@v6
