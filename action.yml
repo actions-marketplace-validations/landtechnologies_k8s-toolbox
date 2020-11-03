@@ -88,6 +88,6 @@ runs:
         fi    
       
         echo "Installing argo $version..."
-        sudo curl --fail -sL -o /usr/local/bin/argo "https://github.com/argoproj/argo/releases/download/$verion/argo-linux-amd64"
+        sudo curl --fail -sL -o /usr/local/bin/argo "https://github.com/argoproj/argo/releases/download/$version/argo-linux-amd64"
         sudo chmod +x /usr/local/bin/argo
       shell: bash
