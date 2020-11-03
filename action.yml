@@ -36,7 +36,7 @@ runs:
     - name: versions
       run: |
         if [ -n "${{ inputs.versions }}" ]; then
-          curl --fail -sL ${{ inputs.versions }} > ~/versions.json
+          curl --fail -sL "${{ inputs.versions }}" > ~/versions.json
         else
           jq -n \
             --arg kubectl "$(curl --fail -sL https://api.github.com/repos/kubernetes/kubernetes/releases/latest | jq -r -e '.tag_name')" \
@@ -48,7 +48,7 @@ runs:
       shell: bash
     - name: kubetcl
       run: |
-        version="$(jq -r .kubectl ~/versions.json)"
+        version="$(jq -e -r .kubectl ~/versions.json)"
       
         if [ -n "${{ inputs.kubectl }}" ]; then
           version="${{ inputs.kubectl }}"
@@ -62,7 +62,7 @@ runs:
       shell: bash
     - name: kops
       run: |
-        version="$(jq -r .kops ~/versions.json)"
+        version="$(jq -e -r .kops ~/versions.json)"
         
         if [ -n "${{ inputs.kops }}" ]; then
           version="${{ inputs.kops }}"
@@ -74,7 +74,7 @@ runs:
       shell: bash
     - name: helm
       run: |
-        version="$(jq -r .helm ~/versions.json)"
+        version="$(jq -e -r .helm ~/versions.json)"
       
         if [ -n "${{ inputs.helm }}" ]; then
           version="${{ inputs.helm }}"
@@ -97,7 +97,7 @@ runs:
       shell: bash
     - name: argo
       run: |
-        version="$(jq -r .argo ~/versions.json)"
+        version="$(jq -e -r .argo ~/versions.json)"
       
         if [ -n "${{ inputs.argo }}" ]; then
           version="${{ inputs.argo }}"
