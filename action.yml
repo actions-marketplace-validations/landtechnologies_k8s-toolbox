@@ -104,7 +104,7 @@ runs:
         fi    
       
         echo "Installing argo $version..."
-        curl -sLO https://github.com/argoproj/argo/releases/download/$version/argo-linux-amd64.gz
+        curl -sLO https://github.com/argoproj/argo-workflows/releases/download/$version/argo-linux-amd64.gz
         gunzip argo-linux-amd64.gz
         sudo mv ./argo-linux-amd64 /usr/local/bin/argo
         sudo chmod +x /usr/local/bin/argo
