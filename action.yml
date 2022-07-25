@@ -36,13 +36,13 @@ runs:
     - name: versions
       run: |
         if [ -n "${{ inputs.versions }}" ]; then
-          curl --fail -sL "${{ inputs.versions }}" > ~/versions.json
+          curl --retry 5 --retry-delay 2 --fail -sL "${{ inputs.versions }}" > ~/versions.json
         else
           jq -n \
-            --arg kubectl "$(curl --fail -sL https://api.github.com/repos/kubernetes/kubernetes/releases/latest | jq -r -e '.tag_name')" \
-            --arg kops "$(curl --fail -sL https://api.github.com/repos/kubernetes/kops/releases/latest | jq -r -e '.tag_name')" \
-            --arg helm "$(curl --fail -sL https://api.github.com/repos/helm/helm/releases/latest | jq -r -e '.tag_name')" \
-            --arg argo "$(curl --fail -sL https://api.github.com/repos/argoproj/argo/releases/latest | jq -r -e '.tag_name')" \
+            --arg kubectl "$(curl --retry 5 --retry-delay 2 --fail -sL https://api.github.com/repos/kubernetes/kubernetes/releases/latest | jq -r -e '.tag_name')" \
+            --arg kops "$(curl --retry 5 --retry-delay 2 --fail -sL https://api.github.com/repos/kubernetes/kops/releases/latest | jq -r -e '.tag_name')" \
+            --arg helm "$(curl --retry 5 --retry-delay 2 --fail -sL https://api.github.com/repos/helm/helm/releases/latest | jq -r -e '.tag_name')" \
+            --arg argo "$(curl --retry 5 --retry-delay 2 --fail -sL https://api.github.com/repos/argoproj/argo/releases/latest | jq -r -e '.tag_name')" \
             '{kubectl: $kubectl, kops: $kops, helm: $helm, argo: $argo}' > ~/versions.json
         fi
       shell: bash
@@ -55,7 +55,7 @@ runs:
         fi
         
         echo "Installing kubectl $version..."
-        sudo curl --fail -sL -o /usr/local/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/$version/bin/linux/amd64/kubectl"
+        sudo curl --retry 5 --retry-delay 2 --fail -sL -o /usr/local/bin/kubectl "https://storage.googleapis.com/kubernetes-release/release/$version/bin/linux/amd64/kubectl"
         sudo chmod +x /usr/local/bin/kubectl
         mkdir -p $HOME/.kube
         echo "${{ inputs.kube-config }}" | base64 -d > $HOME/.kube/config
@@ -69,7 +69,7 @@ runs:
         fi
         
         echo "Installing kops $version..."
-        sudo curl --fail -sL -o /usr/local/bin/kops "https://github.com/kubernetes/kops/releases/download/$version/kops-linux-amd64"
+        sudo curl --retry 5 --retry-delay 2 --fail -sL -o /usr/local/bin/kops "https://github.com/kubernetes/kops/releases/download/$version/kops-linux-amd64"
         sudo chmod +x /usr/local/bin/kops
       shell: bash
     - name: helm
@@ -87,12 +87,12 @@ runs:
       shell: bash
     - name: render
       run: |
-        sudo curl --fail -sL -o /usr/local/bin/render "https://github.com/VirtusLab/render/releases/download/${{ inputs.render }}/render-linux-amd64"
+        sudo curl --retry 5 --retry-delay 2 --fail -sL -o /usr/local/bin/render "https://github.com/VirtusLab/render/releases/download/${{ inputs.render }}/render-linux-amd64"
         sudo chmod +x /usr/local/bin/render
       shell: bash
     - name: aws iam authenticator
       run: |
-        sudo curl --fail -sL -o /usr/local/bin/aws-iam-authenticator "https://amazon-eks.s3-us-west-2.amazonaws.com/${{ inputs.aws-iam-authenticator }}/bin/linux/amd64/aws-iam-authenticator"
+        sudo curl --retry 5 --retry-delay 2 --fail -sL -o /usr/local/bin/aws-iam-authenticator "https://amazon-eks.s3-us-west-2.amazonaws.com/${{ inputs.aws-iam-authenticator }}/bin/linux/amd64/aws-iam-authenticator"
         sudo chmod +x /usr/local/bin/aws-iam-authenticator
       shell: bash
     - name: argo
@@ -104,7 +104,7 @@ runs:
         fi    
       
         echo "Installing argo $version..."
-        curl -sLO https://github.com/argoproj/argo-workflows/releases/download/$version/argo-linux-amd64.gz
+        curl --retry 5 --retry-delay 2 -sLO https://github.com/argoproj/argo-workflows/releases/download/$version/argo-linux-amd64.gz
         gunzip argo-linux-amd64.gz
         sudo mv ./argo-linux-amd64 /usr/local/bin/argo
         sudo chmod +x /usr/local/bin/argo
